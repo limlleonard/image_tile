@@ -1,7 +1,12 @@
 # Image Tile
 ## Description
-Inspired by the art Kiss of Freedom, a wall covered with ceramic tiles (lippen_barcelona.jpg) in Barcelona, I made a program to do the same with own photos.
+Inspired by the art __Kiss of Freedom__, a wall covered with ceramic tiles in Barcelona, I made a program to do the same with own photos.
 
+Origin:
+![Photo: Kiss of Freedom](lippen_barcelona.jpg)
+
+My work:
+![Image tile of tree](target_concatenated_reduced.jpg)
 ## Usage
 `pip install -r requirements.txt`
 
