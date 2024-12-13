@@ -6,7 +6,7 @@ import numpy as np
 from typing import Tuple
 from scipy.optimize import linear_sum_assignment
 
-def img2sqr(path1: str, dim=100):
+def img2sqr(path1: str, dim=80):
     '''Crop an image to a square shape and reduce the resolution to dim'''
     img = Image.open(path1)
     width, height = img.size
@@ -22,7 +22,7 @@ def img2sqr(path1: str, dim=100):
     return img_sqr
 
 class target_image():
-    def __init__(self, path1: str, dim_max=100) -> None:
+    def __init__(self, path1: str, dim_max=80) -> None:
         '''Reduce the image resolution, so the longest side is smaller than dim_max.'''
         '''Return a list of (rgb) in one dimention, together with width and height to reconstruct the image
         RGB matrix are split into lines and concatenated to a 1d list'''
@@ -57,7 +57,7 @@ class image_pool():
         self.lst_path, self.lst_rgb_pool=[],[]
         self.lst_failed=[]
 
-    def init_dict(self, dim=100, path_dict='dct_rgb.json'):
+    def init_dict(self, dim=100, path_dict='dct_rgb.json', save_json=True):
         '''
         Loop through a directory, search for image files, image files are cropped to a square and reduce the dimension to dim.
         Create a dictionary, key is the relative path of the image, value is the average RGB of the image
@@ -74,14 +74,18 @@ class image_pool():
                         dct_rgb[relative_path] = rgb1
                     except:
                         self.lst_failed.append(file)
-        with open(path_dict, "w") as json_file:
-            json.dump(dct_rgb, json_file)
+
+        self.dct_rgb=dct_rgb
+        self.lst_path, self.lst_rgb_pool=list(dct_rgb.keys()), list(dct_rgb.values())
+        if save_json:
+            with open(path_dict, "w") as json_file:
+                json.dump(dct_rgb, json_file)
 
     def read_dict(self, path_dict='dct_rgb.json'):
         '''Read saved dictionary from init_dict'''
         with open(path_dict, "r") as json_file:
-            self.dct_rgb1 = json.load(json_file)
-        self.lst_path, self.lst_rgb_pool=list(self.dct_rgb1.keys()), list(self.dct_rgb1.values())
+            self.dct_rgb = json.load(json_file)
+        self.lst_path, self.lst_rgb_pool=list(self.dct_rgb.keys()), list(self.dct_rgb.values())
 
     def img2rgb(self, img) -> tuple:
         '''Turn a square image into a single pixel'''
